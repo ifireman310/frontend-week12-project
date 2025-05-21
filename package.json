@@ -1,0 +1,15 @@
+{
+  "name": "recipe-crd-json-server",
+  "version": "1.0.0",
+  "main": "recipe.js",
+  "scripts": {
+    "start:server": "json-server --watch db.json --port 3000"
+  },
+  "author": "Ian Fireman",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "json-server": "^1.0.0-beta.3"
+  }
+}
