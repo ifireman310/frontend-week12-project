@@ -60,15 +60,14 @@ async function getAllCategories() {
 }
 
 function hideAllRecipes() {
-    // Empty the recipe list body, 
-    // otherwise clicking the button will show repeat data
+    // Empty the recipe list body to hide all recipes
     recipeListBody.empty();
 }
 
 // Main rendering function to render a list of recipes
 function renderRecipeList(list) {
-    // Empty the recipe list body, 
-    // otherwise clicking the button will show repeat data
+    // Empty the recipe list body when rendering an updated list,
+    // otherwise clicking the button multiple times will show repeated data
     recipeListBody.empty();
 
     // Render each individual recipe in the list
@@ -83,6 +82,7 @@ function renderRecipe(recipe) {
     // Create the columns for each portion of data
     const recipeName = document.createElement("td");
     const link = document.createElement("td");
+    // creating the anchor so that the link field can be hyperlinked
     const alink = document.createElement("a");
     const author = document.createElement("td");
     const category = document.createElement("td");
@@ -90,7 +90,6 @@ function renderRecipe(recipe) {
 
     // Populate the data
     recipeName.innerHTML = recipe.title;
-    // link.innerHTML = recipe.link;
     alink.href = recipe.link;
     alink.innerHTML = recipe.link;
     link.appendChild(alink);
@@ -143,6 +142,7 @@ async function getFilteredRecipes() {
 }
 
 async function postRecipe () {
+    // Function to handle post request to add a new recipe
 
     const recipeTitle = document.querySelector("#recipe-title").value;
     const recipeLink = document.querySelector("#recipe-link").value;
@@ -176,6 +176,8 @@ async function postRecipe () {
 }
 
 async function deleteRecipe() {
+    // Function to handle delete requests for a recipe, requires a recipe id field
+    // provided by the user
 
     const responseDiv = document.querySelector('#response-delete');
     const selectedRecipe = document.querySelector("#recipe-select");
@@ -201,9 +203,9 @@ async function deleteRecipe() {
 /**** START UP ****/
 
 async function startUp() {
-
-    // Populate the recipe category options
+    // Populate the recipe category options upon start-up
     populateAvailableCategories()
 }
 
+// Initialization
 startUp()
