@@ -15,6 +15,9 @@ postRecipeBtn.addEventListener("click", postRecipe);
 const deleteRecipeBtn = document.querySelector("#delete-recipe-button");
 deleteRecipeBtn.addEventListener("click", deleteRecipe);
 
+const hideRecipeBtn = document.querySelector("#hide-recipes-button");
+hideRecipeBtn.addEventListener("click", hideAllRecipes);
+
 // References to important DOM elements to be modified
 const recipeListBody = $("#recipe-list tbody");
 const categorySelect = document.querySelector("#category-select");
@@ -27,19 +30,21 @@ async function fetchAllRecipes() {
 
 async function populateAvailableCategories() {
     // This function gets the available categories and populates the dropdown menu with the available options
+    // Remove all categories from the option list (except the default "select an option")
+    categorySelect.length = 1;
 
     // Get all available categories
     await getAllCategories();
 
     // Sort alphabetically then append them to the dropdown menu
     categories.sort();
-    categorySelect.empty();
     for (let i = 0; i < categories.length; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = categories[i];
         categorySelect.appendChild(option);
     }
+
 }
 
 async function getAllCategories() {
@@ -54,6 +59,11 @@ async function getAllCategories() {
     })
 }
 
+function hideAllRecipes() {
+    // Empty the recipe list body, 
+    // otherwise clicking the button will show repeat data
+    recipeListBody.empty();
+}
 
 // Main rendering function to render a list of recipes
 function renderRecipeList(list) {
@@ -73,13 +83,17 @@ function renderRecipe(recipe) {
     // Create the columns for each portion of data
     const recipeName = document.createElement("td");
     const link = document.createElement("td");
+    const alink = document.createElement("a");
     const author = document.createElement("td");
     const category = document.createElement("td");
     const uniqueId = document.createElement("td");
 
     // Populate the data
     recipeName.innerHTML = recipe.title;
-    link.innerHTML = recipe.link;
+    // link.innerHTML = recipe.link;
+    alink.href = recipe.link;
+    alink.innerHTML = recipe.link;
+    link.appendChild(alink);
     author.innerHTML = recipe.author;
     category.innerHTML = recipe.category;
     uniqueId.innerHTML = recipe.id;
@@ -156,8 +170,6 @@ async function postRecipe () {
         }
     })
 
-    console.log(response);
-
     // Repopulate available categories in case a new one was introduced
     populateAvailableCategories();
 
@@ -176,7 +188,7 @@ async function deleteRecipe() {
     })
     .then(res => res.json())
     .then(data => {
-        responseDiv.textContent = `Recipe #${selectedId} deleted.\nResponse:\n${JSON.stringify(data, null, 2)}`;
+        responseDiv.textContent = `Recipe #${selectedId} deleted.`;
     })
     .catch(err => {
         responseDiv.textContent = 'Error: ' + err.message;
@@ -191,15 +203,7 @@ async function deleteRecipe() {
 async function startUp() {
 
     // Populate the recipe category options
-    await getAllCategories();
-    categories.sort();
-    for (let i = 0; i < categories.length; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = categories[i];
-        categorySelect.appendChild(option);
-    }
-
+    populateAvailableCategories()
 }
 
 startUp()
